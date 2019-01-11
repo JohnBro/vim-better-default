@@ -253,11 +253,9 @@ endif
         nnoremap <C-u> <Esc>viwU<Esc>
         nnoremap <C-Down> ddp
         nnoremap <C-Up>   ddkP
-        nnoremap <Tab>    :tabnext<CR>
         " Visul mode shortcut
         vnoremap <C-a> <C-C>ggVG
         vnoremap <C-s> <C-c>:update<CR>
-        vnoremap <Tab> :tabnext<cr>
         " Termial mode shortcut
         if has('nvim') || has('terminal')
           tnoremap <C-j> <C-W>j
@@ -270,8 +268,6 @@ endif
         inoremap <C-e> <End>
         inoremap <C-d> <Delete>
         inoremap <C-u> <Esc>viwU<Esc>$a
-        nnoremap <Tab> :tabnext<cr>
-        vnoremap <Tab> :tabnext<cr>
         " Command mode shortcut
         cnoremap <C-h> <Left>
         cnoremap <C-j> <Down>
@@ -318,6 +314,42 @@ endif
         nnoremap <Leader>bk :bw<CR>
         nnoremap <Left>     :bprevious<CR>
         nnoremap <Right>    :bnext<CR>
+
+        for s:i in range(1, 9)
+          " <Leader>b[1-9] move to buffer [1-9]
+          execute 'nnoremap <Leader>b' . s:i . ' :b' . s:i . '<CR>'
+        endfor
+        unlet s:i
+      endif
+    " }
+    " Tab {
+      if get(g:, 'vim_better_default_tab_key_mapping', 1)
+        " Use <Tab> to change tab
+        nnoremap <Tab> :tabnext<CR>
+        vnoremap <Tab> :tabnext<cr>
+        " tab-add
+        nnoremap <leader>Ta :tabnew<CR>
+        vnoremap <leader>Ta :tabnew<CR>
+        " tab-close
+        nnoremap <leader>Tc :tabclose<CR>
+        vnoremap <leader>Tc :tabclose<CR>
+        " tab-find
+        nnoremap <leader>Tf :tabfind<CR>
+        vnoremap <leader>Tf :tabfind<CR>
+        " tab-list
+        nnoremap <leader>Tl :tabs<CR>
+        vnoremap <leader>Tl :tabs<CR>
+        " tab-next
+        nnoremap <leader>Tn :tabnext<CR>
+        vnoremap <leader>Tn :tabnext<CR>
+        " tab-previous
+        nnoremap <leader>Tp :tabprevious<CR>
+        vnoremap <leader>Tp :tabprevious<CR>
+        for s:i in range(1, 9)
+          " <Leader><Tab>[1-9] move to tab [1-9]
+          execute 'nnoremap <Leader>T' . s:i . ' ' . s:i . 'gt'
+        endfor
+        unlet s:i
       endif
     " }
 
