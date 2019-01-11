@@ -13,6 +13,13 @@ let g:loaded_vim_better_default = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
+" Identify platform {
+let s:os         = {}
+let s:os.mac     = has('macunix')
+let s:os.linux   = has('unix') && !has('macunix') && !has('win32unix')
+let s:os.windows = has('win32')
+" }
+
 " Neovim has set these as default
 if !has('nvim')
 
@@ -40,29 +47,34 @@ if !has('nvim')
 
 endif
 
-set shortmess=atOI " No help Uganda information, and overwrite read messages to avoid PRESS ENTER prompts
-set ignorecase     " Case insensitive search
-set smartcase      " ... but case sensitive when uc present
-set scrolljump=5   " Line to scroll when cursor leaves screen
-set scrolloff=3    " Minumum lines to keep above and below cursor
-set nowrap         " Do not wrap long lines
-set shiftwidth=4   " Use indents of 4 spaces
-set tabstop=4      " An indentation every four columns
-set softtabstop=4  " Let backspace delete indent
-set splitright     " Puts new vsplit windows to the right of the current
-set splitbelow     " Puts new split windows to the bottom of the current
-set autowrite      " Automatically write a file when leaving a modified buffer
-set mousehide      " Hide the mouse cursor while typing
-set hidden         " Allow buffer switching without saving
-set t_Co=256       " Use 256 colors
-set ruler          " Show the ruler
-set showcmd        " Show partial commands in status line and Selected characters/lines in visual mode
-set showmode       " Show current mode in command-line
-set showmatch      " Show matching brackets/parentthesis
-set matchtime=5    " Show matching time
-set report=0       " Always report changed lines
-set linespace=0    " No extra spaces between rows
-set pumheight=20   " Avoid the pop up menu occupying the whole screen
+set complete+=k       " Include dictionary complection
+set completeopt=menuone,longest,preview
+set shortmess=atOI    " No help Uganda information, and overwrite read messages to avoid PRESS ENTER prompts
+set ignorecase        " Case insensitive search
+set smartcase         " ... but case sensitive when uc present
+set scrolljump=5      " Line to scroll when cursor leaves screen
+set scrolloff=5       " Minumum lines to keep above and below cursor
+set nowrap            " Do not wrap long lines
+set shiftwidth=4      " Use indents of 4 spaces
+set tabstop=4         " An indentation every four columns
+set softtabstop=4     " Let backspace delete indent
+set splitright        " Puts new vsplit windows to the right of the current
+set splitbelow        " Puts new split windows to the bottom of the current
+set autowrite         " Automatically write a file when leaving a modified buffer
+set mousehide         " Hide the mouse cursor while typing
+set hidden            " Allow buffer switching without saving
+set t_Co=256          " Use 256 colors
+set ruler             " Show the ruler
+set showcmd           " Show partial commands in status line and Selected characters/lines in visual mode
+set showmode          " Show current mode in command-line
+set showmatch         " Show matching brackets/parentthesis
+set matchtime=5       " Show matching time
+set report=0          " Always report changed lines
+set linespace=0       " No extra spaces between rows
+set pumheight=20      " Avoid the pop up menu occupying the whole screen
+set timeoutlen=250    " Change timeout to 250ms
+set updatetime=1000   " Change default updatetime
+set sessionoptions+=localoptions,winpos,resize
 
 if !exists('g:vim_better_default_tabs_as_spaces') || g:vim_better_default_tabs_as_spaces
   set expandtab    " Tabs are spaces, not tabs
@@ -94,6 +106,11 @@ nmap j gj
 nmap k gk
 vmap j gj
 vmap k gk
+nnoremap n nzz
+nnoremap N Nzz
+nnoremap G Gzz
+nnoremap { {zz
+nnoremap } }zz
 
 " :W sudo saves the file
 " (useful for handling the permission-denied error)
@@ -174,10 +191,22 @@ if get(g:, 'vim_better_default_persistent_undo', 0)
 endif
 
 if has('gui_running')
+  if s:os.windows
+    source $VIMRUNTIME\mswin.vim
+    source $VIMRUNTIME\delmenu.vim
+    behave mswin
+    set winaltkeys=no
+  else
+    if filereadable("/etc/vim/gvimrc.local")
+      source /etc/vim/gvimrc.local
+    endif
+  endif
   set guioptions-=r        " Hide the right scrollbar
   set guioptions-=L        " Hide the left scrollbar
   set guioptions-=T
   set guioptions-=e
+  set guioptions-=b
+  set guioptions-=m
   set shortmess+=c
   " No annoying sound on errors
   set noerrorbells
@@ -191,42 +220,65 @@ endif
 
     " Basic {
       if get(g:, 'vim_better_default_basic_key_mapping', 1)
-        " Quit normal mode
-        nnoremap <silent> <Leader>q  :q<CR>
-        nnoremap <Leader>Q  :qa!<CR>
-        " Move half page faster
-        nnoremap <Leader>d  <C-d>
-        nnoremap <Leader>u  <C-u>
-        " Insert mode shortcut
-        inoremap <C-h> <BS>
-        inoremap <C-j> <Down>
-        inoremap <C-k> <Up>
-        inoremap <C-b> <Left>
-        inoremap <C-f> <Right>
-        " Bash like
-        inoremap <C-a> <Home>
-        inoremap <C-e> <End>
-        inoremap <C-d> <Delete>
-        " Command mode shortcut
-        cnoremap <C-h> <BS>
-        cnoremap <C-j> <Down>
-        cnoremap <C-k> <Up>
-        cnoremap <C-b> <Left>
-        cnoremap <C-f> <Right>
-        cnoremap <C-a> <Home>
-        cnoremap <C-e> <End>
-        cnoremap <C-d> <Delete>
-        " jj | escaping
-        inoremap jj <Esc>
-        cnoremap jj <C-c>
+        " jk | escaping
+        inoremap jk <Esc>
+        cnoremap jk <C-c>
         " Quit visual mode
         vnoremap v <Esc>
+        " Quit normal mode
         " Move to the start of line
         nnoremap H ^
         " Move to the end of line
         nnoremap L $
         " Redo
         nnoremap U <C-r>
+        nnoremap <silent> <Leader>q  :wq<CR>
+        nnoremap <Leader>Q  :qa!<CR>
+        " Move half page faster
+        nnoremap <Leader>d  <C-d>
+        nnoremap <Leader>u  <C-u>
+        " Insert mode shortcut
+        inoremap <C-h> <Left>
+        inoremap <C-j> <Down>
+        inoremap <C-k> <Up>
+        inoremap <C-l> <Right>
+        inoremap <C-s> <C-o>:update<CR>
+        " Normal mode shortcut
+        nnoremap <C-h> <C-W>h
+        nnoremap <C-j> <C-W>j
+        nnoremap <C-k> <C-W>k
+        nnoremap <C-l> <C-W>l
+        nnoremap <C-a> ggVG
+        nnoremap <C-s> :update<CR>
+        nnoremap <C-u> <Esc>viwU<Esc>
+        nnoremap <C-Down> ddp
+        nnoremap <C-Up>   ddkP
+        nnoremap <Tab>    :tabnext<CR>
+        " Visul mode shortcut
+        vnoremap <C-a> <C-C>ggVG
+        vnoremap <C-s> <C-c>:update<CR>
+        vnoremap <Tab> :tabnext<cr>
+        " Termial mode shortcut
+        if has('nvim') || has('terminal')
+          tnoremap <C-j> <C-W>j
+          tnoremap <C-k> <C-W>k
+          tnoremap <C-h> <C-W>h
+          tnoremap <C-l> <C-W>l
+        endif
+        " Bash like
+        inoremap <C-a> <Home>
+        inoremap <C-e> <End>
+        inoremap <C-d> <Delete>
+        inoremap <C-u> <Esc>viwU<Esc>$a
+        nnoremap <Tab> :tabnext<cr>
+        vnoremap <Tab> :tabnext<cr>
+        " Command mode shortcut
+        cnoremap <C-h> <Left>
+        cnoremap <C-j> <Down>
+        cnoremap <C-k> <Up>
+        cnoremap <C-l> <Right>
+        cnoremap <C-a> <Home>
+        cnoremap <C-e> <End>
         " Quick command mode
         nnoremap <CR> :
         " In the quickfix window, <CR> is used to jump to the error under the
@@ -242,6 +294,13 @@ endif
         else
           map <Leader>' :shell<CR>
         endif
+        if has('gui_running')
+          nnoremap <M-j>              :resize +5<cr>
+          nnoremap <M-k>              :resize -5<cr>
+          nnoremap <M-h>              :vertical resize -5<cr>
+          nnoremap <M-l>              :vertical resize +5<cr>
+        endif
+
         " Search result highlight countermand
         nnoremap <Leader>sc :nohlsearch<CR>
         " Toggle pastemode
@@ -257,6 +316,8 @@ endif
         nnoremap <Leader>bl :blast<CR>
         nnoremap <Leader>bd :bd<CR>
         nnoremap <Leader>bk :bw<CR>
+        nnoremap <Left>     :bprevious<CR>
+        nnoremap <Right>    :bnext<CR>
       endif
     " }
 
@@ -298,16 +359,22 @@ endif
           tnoremap <Leader>wh <C-W>h
           tnoremap <Leader>wl <C-W>l
         endif
-        nnoremap <Leader>wH <C-W>5<
-        nnoremap <Leader>wL <C-W>5>
-        nnoremap <Leader>wJ :resize +5<CR>
-        nnoremap <Leader>wK :resize -5<CR>
+        nnoremap <Leader>wH <C-W>10<
+        nnoremap <Leader>wL <C-W>10>
+        nnoremap <Leader>wJ :resize +10<CR>
+        nnoremap <Leader>wK :resize -6<CR>
         nnoremap <Leader>w= <C-W>=
         nnoremap <Leader>ws <C-W>s
         nnoremap <Leader>w- <C-W>s
         nnoremap <Leader>wv <C-W>v
         nnoremap <Leader>w\| <C-W>v
         nnoremap <Leader>w2 <C-W>v
+      endif
+    " }
+    " String operator shortcup {
+      if get(g:, 'vim_better_default_operator_key_mapping', 0)
+        " Use cp or dp to delete content in parenthesis
+        onoremap p i()
       endif
     " }
 
