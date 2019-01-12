@@ -232,7 +232,8 @@ endif
         nnoremap L $
         " Redo
         nnoremap U <C-r>
-        nnoremap <silent> <Leader>q  :wq<CR>
+
+        nnoremap <silent> <Leader>q  :call default#smart_quit()<CR>
         nnoremap <Leader>Q  :qa!<CR>
         " Move half page faster
         nnoremap <Leader>d  <C-d>
@@ -312,8 +313,6 @@ endif
         nnoremap <Leader>bl :blast<CR>
         nnoremap <Leader>bd :bd<CR>
         nnoremap <Leader>bk :bw<CR>
-        nnoremap <Left>     :bprevious<CR>
-        nnoremap <Right>    :bnext<CR>
 
         for s:i in range(1, 9)
           " <Leader>b[1-9] move to buffer [1-9]
@@ -324,9 +323,11 @@ endif
     " }
     " Tab {
       if get(g:, 'vim_better_default_tab_key_mapping', 1)
-        " Use <Tab> to change tab
+        " Use <Tab>,S-<Tab> to change tab
         nnoremap <Tab> :tabnext<CR>
         vnoremap <Tab> :tabnext<cr>
+        nnoremap <S-Tab> :tabprevious<CR>
+        vnoremap <S-Tab> :tabprevious<CR>
         " tab-add
         nnoremap <leader>Ta :tabnew<CR>
         vnoremap <leader>Ta :tabnew<CR>
@@ -351,6 +352,21 @@ endif
         endfor
         unlet s:i
       endif
+    " }
+
+    " Arrow key remapping {
+    if get(g:, 'vim_better_default_arrow_key_mapping', 0)
+      " remap down-up to switch tab
+      " remap <- -> to switch buffer
+      nnoremap <Left>  :bprevious<CR>
+      vnoremap <Left>  :bprevious<CR>
+      nnoremap <Right> :bnext<CR>
+      vnoremap <Right> :bnext<CR>
+      nnoremap <Up>    :tabprevious<CR>
+      vnoremap <Up>    :tabprevious<CR>
+      nnoremap <Down>  :tabnext<CR>
+      vnoremap <Down>  :tabnext<CR>
+    endif
     " }
 
     " File {
