@@ -355,7 +355,7 @@ endif
     " }
 
     " Arrow key remapping {
-    if get(g:, 'vim_better_default_arrow_key_mapping', 0)
+    if get(g:, 'vim_better_default_arrow_key_mapping', 1)
       " remap down-up to switch tab
       " remap <- -> to switch buffer
       nnoremap <Left>  :bprevious<CR>
