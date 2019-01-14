@@ -127,6 +127,9 @@ command! W w !sudo tee % > /dev/null
 
   " inside tmux
   if exists('$TMUX') && $TERM != 'xterm-kitty'
+    if $TERM != 'screen-256color' && $TERM != 'xterm-256color'
+      set term=xterm-256color      "Fix for Ctrl key abnormal in tmux
+    endif
     let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
     let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
     let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
@@ -220,9 +223,11 @@ endif
 
     " Basic {
       if get(g:, 'vim_better_default_basic_key_mapping', 1)
-        " jk | escaping
+        " jk,<C-i> | escaping
         inoremap jk <Esc>
         cnoremap jk <C-c>
+        inoremap <C-i> <Esc>
+        cnoremap <C-i> <Esc>
         " Quit visual mode
         vnoremap v <Esc>
         " Quit normal mode
