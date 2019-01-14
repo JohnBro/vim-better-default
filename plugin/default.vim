@@ -73,6 +73,7 @@ set report=0          " Always report changed lines
 set linespace=0       " No extra spaces between rows
 set pumheight=20      " Avoid the pop up menu occupying the whole screen
 set timeoutlen=250    " Change timeout to 250ms
+set ttimeoutlen=1000  " Change toggle timeout to 1000ms
 set updatetime=1000   " Change default updatetime
 set sessionoptions+=localoptions,winpos,resize
 
@@ -246,11 +247,14 @@ endif
         nnoremap <Leader>d  <C-d>
         nnoremap <Leader>u  <C-u>
         " Insert mode shortcut
-        inoremap <C-h> <Left>
-        inoremap <C-j> <Down>
+        inoremap <C-h> <Bs>
+        inoremap <C-j> <Esc>
         inoremap <C-k> <Up>
+        inoremap <C-b> <Left>
+        inoremap <C-f> <Right>
         inoremap <C-l> <Right>
         inoremap <C-s> <C-o>:update<CR>
+        inoremap <C-u> <Esc>viwU<Esc>
         " Normal mode shortcut
         nnoremap <C-h> <C-W>h
         nnoremap <C-j> <C-W>j
@@ -258,7 +262,6 @@ endif
         nnoremap <C-l> <C-W>l
         nnoremap <C-a> ggVG
         nnoremap <C-s> :update<CR>
-        nnoremap <C-u> <Esc>viwU<Esc>
         nnoremap <C-Down> ddp
         nnoremap <C-Up>   ddkP
         " Visul mode shortcut
@@ -277,9 +280,11 @@ endif
         inoremap <C-d> <Delete>
         inoremap <C-u> <Esc>viwU<Esc>$a
         " Command mode shortcut
-        cnoremap <C-h> <Left>
+        cnoremap <C-h> <BS>
         cnoremap <C-j> <Down>
         cnoremap <C-k> <Up>
+        cnoremap <C-b> <Left>
+        cnoremap <C-f> <Right>
         cnoremap <C-l> <Right>
         cnoremap <C-a> <Home>
         cnoremap <C-e> <End>
@@ -291,7 +296,7 @@ endif
         " Yank to the end of line
         nnoremap Y y$
         " Auto indent pasted text
-        " nnoremap p p=`]<C-o>
+        nnoremap p p=`]<C-o>
         " Open shell in vim
         if has('nvim') || has('terminal')
           map <Leader>' :terminal<CR>
