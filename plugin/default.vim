@@ -223,11 +223,11 @@ endif
 
     " Basic {
       if get(g:, 'vim_better_default_basic_key_mapping', 1)
-        " jk,<C-i> | escaping
+        " jk,<C-j> | escaping
         inoremap jk <Esc>
         cnoremap jk <C-c>
-        inoremap <C-i> <Esc>
-        cnoremap <C-i> <Esc>
+        inoremap <C-j> <Esc>
+        cnoremap <C-j> <Esc>
         " Quit visual mode
         vnoremap v <Esc>
         " Quit normal mode
