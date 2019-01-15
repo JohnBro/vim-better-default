@@ -252,7 +252,7 @@ endif
         inoremap <C-k> <Up>
         inoremap <C-b> <Left>
         inoremap <C-f> <Right>
-        inoremap <C-l> <Right>
+        inoremap <C-l> <Delete>
         inoremap <C-s> <C-o>:update<CR>
         inoremap <C-u> <Esc>viwU<Esc>
         " Normal mode shortcut
@@ -285,7 +285,7 @@ endif
         cnoremap <C-k> <Up>
         cnoremap <C-b> <Left>
         cnoremap <C-f> <Right>
-        cnoremap <C-l> <Right>
+        cnoremap <C-l> <Delete>
         cnoremap <C-a> <Home>
         cnoremap <C-e> <End>
         " Quick command mode
