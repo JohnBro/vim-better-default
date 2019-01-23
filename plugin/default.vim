@@ -296,7 +296,7 @@ endif
         " Yank to the end of line
         nnoremap Y y$
         " Auto indent pasted text
-        nnoremap p p=`]<C-o>
+        " nnoremap p p=`]<C-o>
         " Open shell in vim
         if has('nvim') || has('terminal')
           map <Leader>' :terminal<CR>
